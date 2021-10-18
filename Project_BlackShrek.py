@@ -134,7 +134,7 @@ def afficher_resultats(player_hand, dealer_hand):
             Parameters:
                 player_hand (list): Jeu du joueur
                 dealer_hand (list): Jeu du croupier
-            Return:
+            Return:5
                 Nothing
     """
 
@@ -212,6 +212,12 @@ def score(player_hand, dealer_hand, wallet, bet):
         wallet = definir_solde(bet, wallet, "ajouter", 2)
         print("Vous avez maintenant " + str(bet * 2) + " en plus sur votre solde!\n"
                                                        "Solde: " + str(wallet))
+
+    # Si le joueur et le croupier ont brulé alors tout le monde.
+    elif total(player_hand) > 21 and total(dealer_hand) > 21:
+        afficher_resultats(player_hand, dealer_hand)
+        print("Dommage! Vous et l'Âne avez brulé.\n"
+              "Solde: " + str(wallet))
     return wallet
 
 
@@ -250,6 +256,8 @@ def game(wallet):
 
         # Stock le choix du joueur
         choice = input("Voulez-vous [T]irer, [R]ester, ou [Q]uitter: ").lower()
+
+        # Le joueur décide de prendre une carte
         if choice == "t":
 
             # Le joueur a une carte en plus
@@ -267,16 +275,17 @@ def game(wallet):
             # Propose au joueur si il veut rejouer
             rejouer(wallet)
 
+        # Le joueur décide de ne pas prendre une autre carte mais continue à jouer
         elif choice == "r":
             if total(dealer_hand) < 17:
                 while total(dealer_hand) < 17:
                     tirer(dealer_hand, deck)
 
-            # Afficher les scores
-            # Affecter le nouveau solde au wallet
+            # Afficher les scores et Affecter le nouveau solde au wallet
             wallet = score(player_hand, dealer_hand, wallet, bet)
             rejouer(wallet)
 
+        # Le joueur décide de quitter la partie
         elif choice == "q":
             print("Merci d'avoir joué à notre BlackShrek!")
 
@@ -295,6 +304,8 @@ afficher_regles()
 print("Bienvenue au Casino Shrek!\n")
 
 money = int(input("Veuillez entrer le montant de votre porte-monnaie (€) : "))
+
+# Limite de solde car une grosse some peut causer des erreurs
 if money > 50000:
     while money > 50000:
         print("Vous ne pouvez pas mettre au-delà de 50 000€ dans votre porte-monnaie!\n")
